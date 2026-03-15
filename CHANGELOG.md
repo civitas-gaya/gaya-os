@@ -5,6 +5,17 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.1.1] – 2026-03-15
+
+### Fixed
+- Redirect to `/dashboard` after login (previously landed on public homepage)
+- Switch from `@sveltejs/adapter-auto` to `@sveltejs/adapter-vercel` for faster builds
+- Use `VERCEL_PROJECT_PRODUCTION_URL` instead of `VERCEL_URL` for Better Auth base URL
+- Suppress optional peer dependency warnings (`better-sqlite3`, `pg-native`, `cloudflare:sockets`, `@react-email/render`)
+- Add `workflow_dispatch` trigger to deploy workflow for manual deploys
+
+---
+
 ## [0.1.0] – 2026-03-15
 
 ### Added
@@ -44,17 +55,6 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Liquid democracy: delegations per category
 - Budget simulation: annual budgets and budget projects
 - Documents (Constitution, Policy) with versioning and status
-
----
-
-## [0.1.1] – 2026-03-15
-
-### Fixed
-- Redirect to `/dashboard` after login (previously landed on public homepage)
-- Switch from `@sveltejs/adapter-auto` to `@sveltejs/adapter-vercel` for faster builds
-- Use `VERCEL_PROJECT_PRODUCTION_URL` instead of `VERCEL_URL` for Better Auth base URL (deployment-specific URL caused origin validation failures)
-- Suppress optional peer dependency warnings (`better-sqlite3`, `pg-native`, `cloudflare:sockets`, `@react-email/render`)
-- Add `workflow_dispatch` trigger to deploy workflow for manual deploys
 
 ---
 
