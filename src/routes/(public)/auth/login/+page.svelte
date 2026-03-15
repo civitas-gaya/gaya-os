@@ -26,7 +26,7 @@
       error =
         result.error.message ?? 'Login failed. Please check your credentials.'
     } else {
-      await goto('/')
+      await goto('/dashboard')
     }
 
     loading = false
@@ -41,7 +41,7 @@
     if (result?.error) {
       error = result.error.message ?? 'Passkey sign-in failed.'
     } else if (result?.data) {
-      await goto('/')
+      await goto('/dashboard')
     }
 
     passkeyLoading = false
