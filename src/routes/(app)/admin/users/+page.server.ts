@@ -3,7 +3,7 @@ import { listUsers, setUserRole, setEmailVerified, deleteUser } from '$lib/serve
 import { sendVerificationEmail } from '$lib/server/email'
 import { createEmailVerificationToken } from 'better-auth/api'
 import { auth } from '$lib/server/auth'
-import { BETTER_AUTH_URL } from '$env/static/private'
+import { getBaseUrl } from '$lib/url'
 import type { PageServerLoad, Actions } from './$types'
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -45,7 +45,7 @@ export const actions: Actions = {
     try {
       const ctx = await auth.$context
       const token = await createEmailVerificationToken(ctx.secret, email)
-      const url = `${BETTER_AUTH_URL}/api/auth/verify-email?token=${token}&callbackURL=%2Fdashboard`
+      const url = `${getBaseUrl()}/api/auth/verify-email?token=${token}&callbackURL=%2Fdashboard`
       await sendVerificationEmail({ to: email, url })
       return { success: true }
     } catch (e) {

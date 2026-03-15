@@ -5,11 +5,11 @@ import { username } from 'better-auth/plugins'
 import { svelteKitHandler } from 'better-auth/svelte-kit'
 import { prisma } from './prisma'
 import { sendVerificationEmail } from './email'
-import { BETTER_AUTH_URL } from '$env/static/private'
+import { getBaseUrl } from '$lib/url'
 
 export const auth = betterAuth({
-  baseURL: BETTER_AUTH_URL,
-  database: prismaAdapter(prisma, { provider: 'sqlite' }),
+  baseURL: getBaseUrl(),
+  database: prismaAdapter(prisma, { provider: process.env.VERCEL ? 'postgresql' : 'sqlite' }),
 
   plugins: [passkey(), username()],
 

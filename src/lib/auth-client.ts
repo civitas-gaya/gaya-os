@@ -1,10 +1,10 @@
 import { createAuthClient } from 'better-auth/svelte'
 import { passkeyClient } from '@better-auth/passkey/client'
 import { usernameClient } from 'better-auth/client/plugins'
-import { PUBLIC_APP_URL } from '$env/static/public'
 
+// baseURL is omitted — better-auth uses the current origin automatically,
+// which works correctly both locally and on Vercel.
 export const authClient = createAuthClient({
-  baseURL: PUBLIC_APP_URL,
   plugins: [passkeyClient(), usernameClient()]
 })
 
