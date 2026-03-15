@@ -2,14 +2,14 @@
   <title>About · Gaya OS</title>
 </svelte:head>
 
-<div class="max-w-2xl">
+<div class="max-w-2xl pt-10">
   <div class="mb-2 text-sm text-muted-foreground">About</div>
   <h1 class="mb-6 text-3xl font-bold tracking-tight">What is Gaya?</h1>
 
   <p class="mb-6 text-muted-foreground leading-relaxed">
-    Gaya is a virtual micro-nation — an experimental space to explore what
-    democratic governance could look like if we designed it from scratch. No
-    elections every four years, no party politics, no passive citizenship.
+    Gaya is a micro-nation — a real political community with its own
+    constitution, governance structures, and citizenship. No elections every
+    four years, no party politics, no passive citizenship.
   </p>
 
   <div class="space-y-8">
@@ -73,8 +73,7 @@
       <p class="text-sm text-muted-foreground leading-relaxed">
         Gaya is in early MVP stage. The constitution (v0.1) is active,
         membership is open, and the core governance features are being built.
-        Everything here is an experiment — participate, critique, and help shape
-        what comes next.
+        Participate, propose, and help shape what comes next.
       </p>
     </section>
   </div>
