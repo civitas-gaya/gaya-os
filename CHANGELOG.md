@@ -5,6 +5,23 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.2.0] – 2026-03-16
+
+### Added
+- Activity log (`/activity`) with audit service, login/logout tracking and cursor-based pagination
+- Document management with versioning (MAJOR.MINOR.PATCH), history, diffs and admin UI
+- CodeMirror editor (Tokyo Night) for Markdown authoring
+- Public `/constitution` page with parallax hero and rendered Markdown
+- Landing page shows active constitution version dynamically
+- Sidebar auto-closes on mobile when a nav item is tapped
+
+### Fixed
+- Prose rendering rewritten with custom `@layer components` styles matching the site's design system
+- Responsive admin documents table (columns hidden on small screens)
+- `redirect()` in `createDocument` action no longer caught as an error
+
+---
+
 ## [0.1.1] – 2026-03-15
 
 ### Fixed
