@@ -7,6 +7,7 @@
   import { Button } from '$lib/components/ui/button'
   import { Separator } from '$lib/components/ui/separator'
   import { MapPin, Link as LinkIcon, Calendar, Pencil } from '@lucide/svelte'
+  import { buildLogSentence, formatRoles } from '$lib/domain/audit'
   import type { PageData } from './$types'
 
   let { data }: { data: PageData } = $props()
@@ -14,6 +15,16 @@
   const session = useSession()
   const currentUser = $derived($session.data?.user as AppUser | undefined)
   const isOwnProfile = $derived(currentUser?.id === data.citizen.id)
+
+  function formatTimestamp(d: Date | string): string {
+    return new Date(d).toLocaleString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+  }
 
   function formatDate(d: Date | string): string {
     return new Date(d).toLocaleDateString('en-GB', {
@@ -118,7 +129,35 @@
       </Tabs.List>
 
       <Tabs.Content value="activity">
-        <p class="text-muted-foreground text-sm">Activity feed coming soon.</p>
+        {#if data.activity.length === 0}
+          <p class="text-muted-foreground text-sm">No activity yet.</p>
+        {:else}
+          <ul class="divide-y rounded-md border">
+            {#each data.activity as entry}
+              <li class="flex flex-col gap-0.5 px-4 py-2.5 sm:flex-row sm:items-baseline sm:gap-3">
+                <span class="text-muted-foreground w-36 shrink-0 font-mono text-xs">
+                  {formatTimestamp(entry.createdAt)}
+                </span>
+                <span class="text-sm leading-relaxed">
+                  {#each buildLogSentence(entry) as seg}
+                    {#if seg.type === 'text'}
+                      {seg.value}
+                    {:else if seg.type === 'code'}
+                      <span class="bg-muted rounded px-1.5 py-0.5 font-mono text-xs">{seg.value}</span>
+                    {:else if seg.type === 'link'}
+                      <a href={seg.href} class="bg-muted text-primary rounded px-1.5 py-0.5 underline underline-offset-2 decoration-primary/40 hover:decoration-primary transition-colors">{seg.value}</a>
+                    {:else if seg.type === 'code-link'}
+                      <a href={seg.href} class="bg-muted text-primary rounded px-1.5 py-0.5 font-mono text-xs underline underline-offset-2 decoration-primary/40 hover:decoration-primary transition-colors">{seg.value}</a>
+                    {/if}
+                  {/each}
+                </span>
+              </li>
+            {/each}
+          </ul>
+          <p class="text-muted-foreground mt-3 text-xs">
+            Showing last {data.activity.length} entries. <a href="/activity?user={data.citizen.id}" class="hover:underline underline-offset-4">View full log →</a>
+          </p>
+        {/if}
       </Tabs.Content>
 
       <Tabs.Content value="proposals">
