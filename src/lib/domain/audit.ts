@@ -17,6 +17,7 @@ export type AuditAction =
   | 'EMAIL_VERIFIED'
   | 'COUNCIL_DECISION'
   | 'SYSTEM_SETTING_UPDATED'
+  | 'CITIZEN_ID_MIGRATED'
 
 export const ACTION_LABELS: Record<AuditAction, string> = {
   USER_REGISTERED: 'registered',
@@ -33,7 +34,8 @@ export const ACTION_LABELS: Record<AuditAction, string> = {
   ROLE_CHANGED: 'had their role changed',
   EMAIL_VERIFIED: 'had their email verified',
   COUNCIL_DECISION: 'made a council decision',
-  SYSTEM_SETTING_UPDATED: 'updated a system setting'
+  SYSTEM_SETTING_UPDATED: 'updated a system setting',
+  CITIZEN_ID_MIGRATED: 'had their citizen ID migrated'
 }
 
 export const ACTION_OPTIONS: { value: AuditAction | ''; label: string }[] = [
