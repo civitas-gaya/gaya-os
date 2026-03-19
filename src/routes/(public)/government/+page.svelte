@@ -3,16 +3,7 @@
   import * as Card from '$lib/components/ui/card'
   import { Separator } from '$lib/components/ui/separator'
   import { Badge } from '$lib/components/ui/badge'
-
-  let bgOffset = $state(0)
-
-  $effect(() => {
-    function handleScroll() {
-      bgOffset = window.scrollY * 0.4
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  })
+  import PublicHero from '$lib/components/public/PublicHero.svelte'
 </script>
 
 <svelte:head>
@@ -20,29 +11,11 @@
 </svelte:head>
 
 <!-- ─── HERO ─────────────────────────────────────────────── -->
-<section
-  class="relative overflow-hidden"
-  style="height: 100dvh; margin-left: calc(50% - 50vw); width: 100vw;"
->
-  <div
-    class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-    style="background-image: url('/images/gaya-orbit.webp'); transform: translateY({bgOffset}px); will-change: transform; top: -20%; height: 140%;"
-  ></div>
-  <div class="absolute inset-0 bg-black/60"></div>
-
-  <div class="relative z-10 flex h-full flex-col items-center justify-center text-center px-4">
-    <div class="mb-4 inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs text-white/80 backdrop-blur-sm">
-      Council-Democratic Republic in Exile
-    </div>
-    <h1 class="mb-4 text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
-      Government of<br /><span class="text-white/90">Civitas Gaya</span>
-    </h1>
-    <p class="mx-auto max-w-xl text-white/70">
-      Designed to prevent the concentration of power and to keep political authority
-      directly accountable to those affected by decisions.
-    </p>
-  </div>
-</section>
+<PublicHero
+  badge="Council-Democratic Republic in Exile"
+  title="Government of Civitas Gaya"
+  subtitle="Designed to prevent the concentration of power and to keep political authority directly accountable to those affected by decisions."
+/>
 
 <!-- ─── KEY FACTS ─────────────────────────────────────────── -->
 <section
@@ -58,10 +31,10 @@
       {#each [
         { label: 'Form of government', value: 'Council-democratic republic in exile' },
         { label: 'Territorial claim', value: 'Planet Gaya (homeworld in the Helion system), symbolic exile territories on Earth' },
-        { label: 'Head of state', value: 'None — sovereignty lies collectively with the citizenry' },
+        { label: 'Head of state', value: 'None - sovereignty lies collectively with the citizenry' },
         { label: 'Primary language', value: 'English (working language), with translations encouraged' },
         { label: 'Citizenship', value: 'Voluntary, non-exclusive; dual and multiple macronational citizenships accepted' },
-        { label: 'Symbols', value: 'National flag (Helion–Gaya motif); Gaya Foundation Stone as symbolic territorial anchor' },
+        { label: 'Symbols', value: 'National flag (Helion-Gaya motif); Gaya Foundation Stone as symbolic territorial anchor' },
         { label: 'Digital presence', value: 'Secure online platforms for deliberation, voting and public records' },
       ] as row}
         <div class="grid grid-cols-1 gap-2 py-6 sm:grid-cols-[280px_1fr]">
@@ -85,7 +58,7 @@
         <h2 class="mb-6 text-3xl font-bold tracking-tight">Constitutional Order</h2>
         <p class="text-muted-foreground leading-relaxed mb-6">
           Civitas Gaya is governed by the <strong class="text-foreground font-medium">Constitution of Civitas Gaya</strong>,
-          adopted by its founding citizens in digital assembly. The Constitution is the highest law of the nation —
+          adopted by its founding citizens in digital assembly. The Constitution is the highest law of the nation -
           all rules, policies and platform norms must conform to it.
         </p>
         <Button variant="outline" href="/constitution">View the Constitution</Button>
@@ -170,7 +143,7 @@
       <div class="space-y-0 divide-y divide-border">
         {#each [
           { n: '01', title: 'Constitutional norms', body: 'Supreme and directly binding.' },
-          { n: '02', title: 'Organic laws', body: 'Higher-order laws defining key structures — Law on Councils, Territorial Law in Exile, Citizenship Law.' },
+          { n: '02', title: 'Organic laws', body: 'Higher-order laws defining key structures - Law on Councils, Territorial Law in Exile, Citizenship Law.' },
           { n: '03', title: 'Ordinary laws & regulations', body: 'Detailed rules adopted by councils and confirmed by citizen votes.' },
           { n: '04', title: 'Platform rules & protocols', body: 'Technical and organisational provisions, always subordinate to constitutional rights.' },
         ] as layer}
@@ -196,7 +169,7 @@
     <div class="mb-2 text-xs font-medium uppercase tracking-widest text-muted-foreground">Membership</div>
     <h2 class="mb-4 text-3xl font-bold tracking-tight">Membership and Citizenship</h2>
     <p class="mb-12 max-w-2xl text-muted-foreground leading-relaxed">
-      Naturalisation is open but meaningful — a political and ethical commitment within a
+      Naturalisation is open but meaningful - a political and ethical commitment within a
       self-governing community, not a replacement for macronational citizenship.
     </p>
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr] mb-10">
@@ -209,9 +182,9 @@
         </Card.Header>
         <Card.Content>
           <ul class="space-y-2 text-sm text-muted-foreground">
-            <li class="flex gap-2"><span class="text-foreground">—</span> Register and accept community rules</li>
-            <li class="flex gap-2"><span class="text-foreground">—</span> Read, observe, give non-binding feedback</li>
-            <li class="flex gap-2"><span class="text-foreground">—</span> No voting rights</li>
+            <li class="flex gap-2"><span class="text-foreground">-</span> Register and accept community rules</li>
+            <li class="flex gap-2"><span class="text-foreground">-</span> Read, observe, give non-binding feedback</li>
+            <li class="flex gap-2"><span class="text-foreground">-</span> No voting rights</li>
           </ul>
         </Card.Content>
       </Card.Root>
@@ -225,9 +198,9 @@
         </Card.Header>
         <Card.Content>
           <ul class="space-y-2 text-sm text-muted-foreground">
-            <li class="flex gap-2"><span class="text-foreground">—</span> Formally endorse the Constitution</li>
-            <li class="flex gap-2"><span class="text-foreground">—</span> Complete the naturalisation process</li>
-            <li class="flex gap-2"><span class="text-foreground">—</span> Initiative, voting, candidacy, delegation</li>
+            <li class="flex gap-2"><span class="text-foreground">-</span> Formally endorse the Constitution</li>
+            <li class="flex gap-2"><span class="text-foreground">-</span> Complete the naturalisation process</li>
+            <li class="flex gap-2"><span class="text-foreground">-</span> Initiative, voting, candidacy, delegation</li>
           </ul>
         </Card.Content>
       </Card.Root>
@@ -238,9 +211,9 @@
         </Card.Header>
         <Card.Content>
           <ul class="space-y-2 text-sm text-muted-foreground">
-            <li class="flex gap-2"><span class="text-foreground">—</span> Statement of commitment to Civitas Gaya's values</li>
-            <li class="flex gap-2"><span class="text-foreground">—</span> Introduction to the history of Gaya and the exile</li>
-            <li class="flex gap-2"><span class="text-foreground">—</span> Confirmation by citizenship committee</li>
+            <li class="flex gap-2"><span class="text-foreground">-</span> Statement of commitment to Civitas Gaya's values</li>
+            <li class="flex gap-2"><span class="text-foreground">-</span> Introduction to the history of Gaya and the exile</li>
+            <li class="flex gap-2"><span class="text-foreground">-</span> Confirmation by citizenship committee</li>
           </ul>
         </Card.Content>
       </Card.Root>
@@ -264,8 +237,8 @@
       <p class="text-muted-foreground leading-relaxed mb-4">
         As a state in exile, Civitas Gaya does not claim exclusive sovereignty over any physical
         territory on Earth and fully recognises the territorial integrity and legal authority of
-        recognised macronational states. Its territorial metaphors — Gaya, the Foundation Stone,
-        personal ground — are <strong class="text-foreground font-medium">symbolic and cultural</strong>,
+        recognised macronational states. Its territorial metaphors - Gaya, the Foundation Stone,
+        personal ground - are <strong class="text-foreground font-medium">symbolic and cultural</strong>,
         not competing legal claims.
       </p>
       <p class="text-muted-foreground leading-relaxed">

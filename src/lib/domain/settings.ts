@@ -41,6 +41,7 @@ export interface GovernanceSettings {
     }
   }
   citizenship: {
+    open: boolean              // Whether new citizenship applications are accepted
     minAccountAgeDays: number  // 0 = kein Minimum
     motivationMinChars: number
     ipWindowDays: number       // Fenster für IP-Duplikat-Prüfung
@@ -48,6 +49,9 @@ export interface GovernanceSettings {
   }
   username: {
     changeCooldownDays: number // Mindestabstand zwischen Username-Änderungen
+  }
+  nation: {
+    stage: string              // e.g. 'MVP', 'Beta', 'Active'
   }
 }
 
@@ -84,6 +88,7 @@ export const DEFAULT_GOVERNANCE_SETTINGS: GovernanceSettings = {
     }
   },
   citizenship: {
+    open: true,
     minAccountAgeDays: 0,
     motivationMinChars: 300,
     ipWindowDays: 30,
@@ -91,6 +96,9 @@ export const DEFAULT_GOVERNANCE_SETTINGS: GovernanceSettings = {
   },
   username: {
     changeCooldownDays: 90
+  },
+  nation: {
+    stage: 'MVP'
   }
 }
 
@@ -108,11 +116,13 @@ export type SettingKey =
   | 'proposal.minSupportCount'
   | 'proposal.discussion.minDays'
   | 'engagement.points'
+  | 'citizenship.open'
   | 'citizenship.minAccountAgeDays'
   | 'citizenship.motivationMinChars'
   | 'citizenship.ipWindowDays'
   | 'citizenship.councilGracePeriodDays'
   | 'username.changeCooldownDays'
+  | 'nation.stage'
 
 export interface SystemSettingUpdatedMeta {
   key: string

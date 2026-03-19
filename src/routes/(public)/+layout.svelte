@@ -1,17 +1,18 @@
 <script lang="ts">
-  import Header from '$lib/components/Header.svelte'
-  import Footer from '$lib/components/Footer.svelte'
+  import PublicHeader from '$lib/components/public/PublicHeader.svelte'
+  import PublicFooter from '$lib/components/public/PublicFooter.svelte'
+  import type { LayoutData } from './$types'
 
   import { dev } from '$app/environment';
   import { injectAnalytics } from '@vercel/analytics/sveltekit';
 
   injectAnalytics({ mode: dev ? 'development' : 'production' });
 
-  let { children } = $props()
+  let { children, data }: { children: import('svelte').Snippet, data: LayoutData } = $props()
 </script>
 
-<Header />
+<PublicHeader />
 <main class="mx-auto min-h-[calc(100vh-3.5rem)] max-w-7xl px-4">
   {@render children()}
 </main>
-<Footer />
+<PublicFooter featuredLaws={data.featuredLaws} />

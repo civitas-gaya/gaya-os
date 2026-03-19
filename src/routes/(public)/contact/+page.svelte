@@ -6,19 +6,10 @@
   import { Textarea } from '$lib/components/ui/textarea'
   import { Checkbox } from '$lib/components/ui/checkbox'
   import * as Select from '$lib/components/ui/select'
+  import PublicHero from '$lib/components/public/PublicHero.svelte'
   import type { ActionData } from './$types'
 
   let { form }: { form: ActionData } = $props()
-
-  let bgOffset = $state(0)
-
-  $effect(() => {
-    function handleScroll() {
-      bgOffset = window.scrollY * 0.4
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  })
 
   const contacts = [
     {
@@ -97,29 +88,11 @@
 </svelte:head>
 
 <!-- ─── HERO ─────────────────────────────────────────────── -->
-<section
-  class="relative overflow-hidden"
-  style="height: 100dvh; margin-left: calc(50% - 50vw); width: 100vw;"
->
-  <div
-    class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-    style="background-image: url('/images/gaya-orbit.webp'); transform: translateY({bgOffset}px); will-change: transform; top: -20%; height: 140%;"
-  ></div>
-  <div class="absolute inset-0 bg-black/60"></div>
-
-  <div class="relative z-10 flex h-full flex-col items-center justify-center text-center px-4">
-    <div class="mb-4 inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs text-white/80 backdrop-blur-sm">
-      Get in Touch
-    </div>
-    <h1 class="mb-4 text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
-      Contact<br /><span class="text-white/90">Civitas Gaya</span>
-    </h1>
-    <p class="mx-auto max-w-xl text-white/70">
-      Choose the address that best matches your request, or use the contact form below.
-      We read everything.
-    </p>
-  </div>
-</section>
+<PublicHero
+  badge="Get in Touch"
+  title="Contact to Civitas Gaya"
+  subtitle="Choose the address that best matches your request, or use the contact form below. We read everything."
+/>
 
 <!-- ─── CONTACT ADDRESSES ─────────────────────────────────── -->
 <section

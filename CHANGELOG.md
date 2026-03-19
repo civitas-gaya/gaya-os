@@ -5,7 +5,28 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
-## [0.5.1] – 2026-03-18
+## [0.6.0] - 2026-03-19
+
+### Added
+- Public component library: `PublicHero` (parallax, scroll indicator, configurable height), `PublicHeader` (mobile hamburger via Sheet), `PublicFooter` (dynamic featured law links)
+- `/laws` overview page and `/laws/[slug]` dynamic route for all published POLICY documents
+- Homepage rebuilt: status bar (Constitution version, Gaya OS version, Stage, Membership, Citizens, Visitors), "How it works" steps, quote section, 6 feature cards, Proposals & Votes placeholders
+- `nation.stage` and `citizenship.open` added to governance settings; "Applications closed" notice on `/id-card` for Visitors
+- Nation tab in Admin Governance with stage select (MVP/Alpha/Beta/Active/Stable) and membership toggle
+- `lib/version.ts` exporting package version for use in templates
+
+### Changed
+- `getAllSettings()` now covers all settings including `citizenship.open` and `nation.stage`; all callers use the unified service instead of one-off Prisma queries
+- Static law routes (`/laws/citizenship`, `/laws/councils`, `/laws/territory`) replaced by dynamic `/laws/[slug]`
+- `/about` removed; links point to `/government`
+- Public header: brand left, auth icons always visible, nav centered (desktop), hamburger (mobile)
+
+### Fixed
+- Content: em dashes and en dashes replaced with hyphens throughout all public pages; straight ASCII quotes enforced
+
+---
+
+## [0.5.1] - 2026-03-18
 
 ### Changed
 - Law pages (`/laws/citizenship`, `/laws/councils`, `/laws/territory`) now load their content dynamically from the DB and render with the same hero + Markdown layout as the Constitution page; unpublished laws show a "Not yet published" fallback

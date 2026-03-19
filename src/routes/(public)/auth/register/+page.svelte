@@ -167,7 +167,7 @@
           {:else if usernameStatus === 'blacklisted'}
             <p class="text-destructive text-xs">This username is not allowed{usernameBlacklistReason ? `: ${usernameBlacklistReason}` : ''}.</p>
           {:else if usernameStatus === 'invalid'}
-            <p class="text-destructive text-xs">3–30 characters, letters, numbers, underscores and dots only.</p>
+            <p class="text-destructive text-xs">3-30 characters, letters, numbers, underscores and dots only.</p>
           {:else}
             <p class="text-muted-foreground text-xs">
               Letters, numbers, underscores and dots only.
