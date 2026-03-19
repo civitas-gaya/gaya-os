@@ -1,16 +1,7 @@
 <script lang="ts">
   import * as Accordion from '$lib/components/ui/accordion'
   import { Button } from '$lib/components/ui/button'
-
-  let bgOffset = $state(0)
-
-  $effect(() => {
-    function handleScroll() {
-      bgOffset = window.scrollY * 0.4
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  })
+  import PublicHero from '$lib/components/public/PublicHero.svelte'
 </script>
 
 <svelte:head>
@@ -18,29 +9,11 @@
 </svelte:head>
 
 <!-- ─── HERO ─────────────────────────────────────────────── -->
-<section
-  class="relative overflow-hidden"
-  style="height: 100dvh; margin-left: calc(50% - 50vw); width: 100vw;"
->
-  <div
-    class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-    style="background-image: url('/images/gaya-orbit.webp'); transform: translateY({bgOffset}px); will-change: transform; top: -20%; height: 140%;"
-  ></div>
-  <div class="absolute inset-0 bg-black/60"></div>
-
-  <div class="relative z-10 flex h-full flex-col items-center justify-center text-center px-4">
-    <div class="mb-4 inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs text-white/80 backdrop-blur-sm">
-      Frequently Asked Questions
-    </div>
-    <h1 class="mb-4 text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
-      Questions about<br /><span class="text-white/90">Civitas Gaya</span>
-    </h1>
-    <p class="mx-auto max-w-xl text-white/70">
-      Everything you need to know about what we are, how we govern ourselves,
-      and how to get involved.
-    </p>
-  </div>
-</section>
+<PublicHero
+  badge="Frequently Asked Questions"
+  title="Questions about Civitas Gaya"
+  subtitle="Everything you need to know about what we are, how we govern ourselves, and how to get involved."
+/>
 
 <!-- ─── ABOUT ──────────────────────────────────────────────── -->
 <section
@@ -72,7 +45,7 @@
             <p class="text-muted-foreground leading-relaxed pb-2">
               Civitas Gaya is <strong class="text-foreground font-medium">not</strong> a recognised state under international law
               and does not claim to be one. It is a serious micronation: a community that uses
-              state-like structures — constitution, councils, citizenship, symbols — to experiment
+              state-like structures - constitution, councils, citizenship, symbols - to experiment
               with egalitarian and participatory self-government. How deep you engage (purely
               symbolic, strongly political, artistic) is up to you.
             </p>
@@ -140,8 +113,8 @@
             <p class="text-muted-foreground leading-relaxed pb-2">
               No. Civitas Gaya does <strong class="text-foreground font-medium">not</strong> claim
               exclusive sovereignty over any piece of land on Earth. All Earth-based states retain
-              full legal authority. Our territorial ideas — the home planet Gaya, the Gaya Foundation
-              Stone, and "personal ground" under a citizen's feet — are symbolic frameworks for
+              full legal authority. Our territorial ideas - the home planet Gaya, the Gaya Foundation
+              Stone, and "personal ground" under a citizen's feet - are symbolic frameworks for
               identity and internal organisation, not legal claims against existing countries.
             </p>
           </Accordion.Content>
@@ -215,7 +188,7 @@
                     <span class="text-xs font-semibold text-muted-foreground shrink-0 pt-0.5">{step.n}</span>
                     <div>
                       <span class="text-sm font-medium text-foreground">{step.label}</span>
-                      <span class="text-sm"> — {step.body}</span>
+                      <span class="text-sm"> - {step.body}</span>
                     </div>
                   </div>
                 {/each}

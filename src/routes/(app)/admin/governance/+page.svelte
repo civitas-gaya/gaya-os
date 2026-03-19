@@ -16,6 +16,8 @@
   // Only threshold type needs $state because it drives a conditional UI (supermajority % input)
   // and requiresElection for the Switch component which needs two-way reactivity
   let requiresElection = $state(false)
+  let membershipOpen = $state(true)
+  let nationStage = $state('MVP')
   let constitutionType = $state<VoteThreshold['type']>('unanimous')
   let policyType = $state<VoteThreshold['type']>('unanimous')
   let budgetType = $state<VoteThreshold['type']>('unanimous')
@@ -24,6 +26,8 @@
 
   $effect(() => {
     requiresElection = data.settings.council.requiresElection
+    membershipOpen = data.membershipOpen
+    nationStage = data.nationStage
     constitutionType = data.settings.voting.thresholds.constitution.type
     policyType = data.settings.voting.thresholds.policy.type
     budgetType = data.settings.voting.thresholds.budget.type
@@ -37,6 +41,14 @@
       await update({ reset: false })
     }
   }
+
+  const STAGE_OPTIONS = [
+    { value: 'MVP', label: 'MVP' },
+    { value: 'Alpha', label: 'Alpha' },
+    { value: 'Beta', label: 'Beta' },
+    { value: 'Active', label: 'Active' },
+    { value: 'Stable', label: 'Stable' }
+  ]
 
   const THRESHOLD_OPTIONS = [
     { value: 'unanimous', label: 'Unanimous (100%)' },
@@ -64,12 +76,59 @@
 
   <Tabs.Root bind:value={activeTab}>
     <Tabs.List class="mb-6">
+      <Tabs.Trigger value="nation">Nation</Tabs.Trigger>
       <Tabs.Trigger value="councils">Councils</Tabs.Trigger>
       <Tabs.Trigger value="voting">Voting</Tabs.Trigger>
       <Tabs.Trigger value="proposals">Proposals</Tabs.Trigger>
       <Tabs.Trigger value="engagement">Engagement Points</Tabs.Trigger>
       <Tabs.Trigger value="username">Usernames</Tabs.Trigger>
     </Tabs.List>
+
+    <!-- Nation Tab -->
+    <Tabs.Content value="nation">
+      <Card.Root>
+        <Card.Header>
+          <Card.Title>Nation Status</Card.Title>
+          <Card.Description>
+            Controls visible on the public landing page. Changes take effect immediately.
+          </Card.Description>
+        </Card.Header>
+        <Card.Content>
+          <form method="POST" action="?/updateNation" use:enhance={reloadAfter} class="space-y-6">
+            <div class="space-y-2">
+              <Label>Development stage</Label>
+              <input type="hidden" name="stage" value={nationStage} />
+              <Select.Root type="single" bind:value={nationStage}>
+                <Select.Trigger class="w-48">
+                  {STAGE_OPTIONS.find(o => o.value === nationStage)?.label ?? nationStage}
+                </Select.Trigger>
+                <Select.Content>
+                  {#each STAGE_OPTIONS as opt}
+                    <Select.Item value={opt.value}>{opt.label}</Select.Item>
+                  {/each}
+                </Select.Content>
+              </Select.Root>
+              <p class="text-muted-foreground text-xs">
+                Shown in the status bar on the public landing page.
+              </p>
+            </div>
+            <div class="flex items-center gap-3">
+              <Switch.Root
+                id="membershipOpen"
+                checked={membershipOpen}
+                onCheckedChange={(v) => (membershipOpen = v)}
+              />
+              <input type="hidden" name="membershipOpen" value={membershipOpen} />
+              <Label for="membershipOpen">Citizenship applications open</Label>
+            </div>
+            <p class="text-muted-foreground text-xs -mt-4">
+              When disabled, visitors can still register but cannot apply for citizenship.
+            </p>
+            <Button type="submit">Save nation settings</Button>
+          </form>
+        </Card.Content>
+      </Card.Root>
+    </Tabs.Content>
 
     <!-- Councils Tab -->
     <Tabs.Content value="councils">

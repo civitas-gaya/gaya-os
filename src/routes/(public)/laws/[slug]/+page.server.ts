@@ -1,9 +1,10 @@
 import { prisma } from '$lib/server/prisma'
+import { error } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ params }) => {
   const doc = await prisma.document.findFirst({
-    where: { slug: 'territory', type: 'POLICY' },
+    where: { slug: params.slug, type: 'POLICY' },
     include: {
       versions: {
         where: { status: 'ACTIVE' },
@@ -19,8 +20,12 @@ export const load: PageServerLoad = async () => {
     }
   })
 
-  if (!doc || !doc.versions[0]) {
-    return { document: null }
+  if (!doc) {
+    error(404, 'Law not found')
+  }
+
+  if (!doc.versions[0]) {
+    return { document: null, title: doc.title }
   }
 
   const v = doc.versions[0]
@@ -33,6 +38,7 @@ export const load: PageServerLoad = async () => {
       changelog: v.changelog,
       createdAt: v.createdAt,
       createdBy: v.createdBy
-    }
+    },
+    title: doc.title
   }
 }

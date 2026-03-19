@@ -1,6 +1,7 @@
 <script lang="ts">
   import { marked } from 'marked'
   import { Badge } from '$lib/components/ui/badge'
+  import PublicHero from '$lib/components/public/PublicHero.svelte'
   import type { PageData } from './$types'
 
   let { data }: { data: PageData } = $props()
@@ -8,40 +9,20 @@
   const renderedHtml = $derived(
     data.document ? (marked.parse(data.document.content) as string) : ''
   )
-
-  let bgOffset = $state(0)
-  $effect(() => {
-    function handleScroll() {
-      bgOffset = window.scrollY * 0.4
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  })
 </script>
 
 <svelte:head>
-  <title>Law on Councils · Civitas Gaya</title>
+  <title>{data.title} · Civitas Gaya</title>
 </svelte:head>
 
-<section
-  class="relative overflow-hidden"
-  style="height: 60dvh; min-height: 360px; margin-left: calc(50% - 50vw); width: 100vw;"
+<PublicHero
+  badge="Laws & Regulations"
+  title={data.title}
+  overlay="bg-black/65"
 >
-  <div
-    class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-    style="background-image: url('/images/gaya-orbit.webp'); transform: translateY({bgOffset}px); will-change: transform; top: -20%; height: 140%;"
-  ></div>
-  <div class="absolute inset-0 bg-black/65"></div>
-
-  <div class="relative z-10 flex h-full flex-col items-center justify-center text-center px-4">
-    <div class="mb-3 inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs text-white/80 backdrop-blur-sm">
-      Laws & Regulations
-    </div>
-    <h1 class="mb-3 text-4xl font-bold tracking-tight text-white sm:text-5xl">
-      {data.document?.title ?? 'Law on Councils'}
-    </h1>
+  {#snippet afterTitle()}
     {#if data.document}
-      <div class="flex items-center justify-center gap-3 mt-2">
+      <div class="flex items-center justify-center gap-3 mt-2 mb-8">
         <Badge variant="outline" class="border-white/30 text-white/80 font-mono">
           v{data.document.versionLabel}
         </Badge>
@@ -50,8 +31,8 @@
         </span>
       </div>
     {/if}
-  </div>
-</section>
+  {/snippet}
+</PublicHero>
 
 {#if !data.document}
   <div class="pt-16 pb-20 max-w-2xl">

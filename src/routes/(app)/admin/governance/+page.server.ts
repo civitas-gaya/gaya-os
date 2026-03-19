@@ -13,7 +13,12 @@ export const load: PageServerLoad = async ({ locals }) => {
       include: { createdBy: { select: { id: true, name: true, username: true } } }
     })
   ])
-  return { settings, blacklist }
+  return {
+    settings,
+    blacklist,
+    nationStage: settings.nation.stage,
+    membershipOpen: settings.citizenship.open
+  }
 }
 
 function getActor(locals: App.Locals) {
@@ -136,6 +141,22 @@ export const actions: Actions = {
 
     await updateSetting('username.changeCooldownDays', cooldownDays, actor)
     return { success: true, tab: 'username' }
+  },
+
+  updateNation: async ({ locals, request }) => {
+    if (locals.user?.role !== 'ADMIN') error(403, 'Forbidden')
+    const data = await request.formData()
+    const actor = getActor(locals)
+
+    const stage = (data.get('stage') as string | null)?.trim() ?? ''
+    const membershipOpen = data.get('membershipOpen') === 'true'
+
+    if (!stage) return fail(400, { message: 'Stage label is required.', tab: 'nation' })
+
+    await updateSetting('nation.stage', stage, actor)
+    await updateSetting('citizenship.open', membershipOpen, actor)
+
+    return { success: true, tab: 'nation' }
   },
 
   addBlacklistPattern: async ({ locals, request }) => {

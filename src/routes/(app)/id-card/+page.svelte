@@ -160,6 +160,24 @@
       </Card.Content>
     </Card.Root>
 
+  <!-- ─── VISITOR: Applications closed ─── -->
+  {:else if !data.membershipOpen}
+    <Card.Root class="border-border">
+      <Card.Header>
+        <Card.Title>Citizenship Applications Closed</Card.Title>
+        <Card.Description>
+          The naturalization process is currently suspended by the Council.
+        </Card.Description>
+      </Card.Header>
+      <Card.Content>
+        <p class="text-sm text-muted-foreground leading-relaxed">
+          New citizenship applications are not being accepted at this time. This may change
+          through a Council decision or citizen proposal. Check back later or follow the
+          activity feed for updates.
+        </p>
+      </Card.Content>
+    </Card.Root>
+
   <!-- ─── VISITOR: Application form (new or after rejection) ─── -->
   {:else}
     {#if data.application?.status === 'REJECTED'}

@@ -21,7 +21,8 @@ export const load: PageServerLoad = async ({ locals }) => {
   return {
     user: locals.user,
     application,
-    motivationMinChars: settings.citizenship.motivationMinChars
+    motivationMinChars: settings.citizenship.motivationMinChars,
+    membershipOpen: settings.citizenship.open
   }
 }
 

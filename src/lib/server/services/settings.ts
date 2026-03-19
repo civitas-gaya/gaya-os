@@ -68,6 +68,7 @@ export async function getAllSettings(): Promise<GovernanceSettings> {
       }
     },
     citizenship: {
+      open: get('citizenship.open', d.citizenship.open),
       minAccountAgeDays: get(
         'citizenship.minAccountAgeDays',
         d.citizenship.minAccountAgeDays
@@ -81,6 +82,9 @@ export async function getAllSettings(): Promise<GovernanceSettings> {
     },
     username: {
       changeCooldownDays: get('username.changeCooldownDays', d.username.changeCooldownDays)
+    },
+    nation: {
+      stage: get('nation.stage', d.nation.stage)
     }
   }
 }
