@@ -149,6 +149,7 @@ model Unit {
   proposals   Proposal[]
   budgets     Budget[]
   city        City?
+  documents   Document[]
 }
 
 model Membership {
@@ -367,9 +368,11 @@ model Document {
   title     String
   type      DocumentType
   slug      String            @unique
+  unitId    String?
   createdAt DateTime          @default(now())
   updatedAt DateTime          @updatedAt
 
+  unit      Unit?             @relation(fields: [unitId], references: [id])
   versions  DocumentVersion[]
 }
 

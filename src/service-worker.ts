@@ -22,8 +22,12 @@ precacheAndRoute(precacheList)
 cleanupOutdatedCaches()
 
 // API: NetworkFirst, 10s timeout, 24h cache
+// SSE streams and auth endpoints must never be cached
 registerRoute(
-	({ url }) => url.pathname.startsWith('/api/'),
+	({ url }) =>
+		url.pathname.startsWith('/api/') &&
+		!url.pathname.endsWith('/stream') &&
+		!url.pathname.startsWith('/api/auth/'),
 	new NetworkFirst({
 		cacheName: 'api-cache',
 		networkTimeoutSeconds: 10,

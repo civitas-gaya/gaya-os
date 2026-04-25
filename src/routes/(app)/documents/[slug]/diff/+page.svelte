@@ -72,13 +72,12 @@
       {#if changes.length === 0}
         <p class="text-muted-foreground text-sm">No differences found.</p>
       {:else}
-        <pre class="text-xs leading-relaxed font-mono overflow-x-auto rounded-sm">{#each changes as change}<span
-            class={change.added
-              ? 'block bg-green-50 text-green-900 dark:bg-green-950 dark:text-green-100'
+        <div class="text-xs leading-relaxed font-mono rounded-sm">{#each changes as change}<span
+            class="{change.added
+              ? 'bg-green-50 text-green-900 dark:bg-green-950 dark:text-green-100'
               : change.removed
-                ? 'block bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100'
-                : 'block text-muted-foreground'
-          }>{change.added ? '+ ' : change.removed ? '- ' : '  '}{change.value}</span>{/each}</pre>
+                ? 'bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100'
+                : 'text-muted-foreground'} block whitespace-pre-wrap wrap-break-word">{change.added ? '+ ' : change.removed ? '- ' : '  '}{change.value}</span>{/each}</div>
       {/if}
     </Card.Content>
   </Card.Root>

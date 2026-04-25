@@ -6,6 +6,7 @@ import type {
   DocumentDetail,
   DocumentVersionMeta,
   DocumentVersionDetail,
+  DocumentUnit,
   DocumentType
 } from '$lib/domain/documents'
 
@@ -24,10 +25,37 @@ const VERSION_META_SELECT = {
   createdBy: { select: VERSION_AUTHOR_SELECT }
 } as const
 
+export async function listUnits(): Promise<DocumentUnit[]> {
+  const units = await prisma.unit.findMany({
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+      city: { select: { active: true } },
+      councils: { select: { type: true } }
+    },
+    orderBy: { name: 'asc' }
+  })
+
+  return units
+    .filter((u) => {
+      // Exclude units tied to an inactive city (unpublished cities)
+      if (u.city && !u.city.active) return false
+      return true
+    })
+    .map(({ id, name, slug, councils }) => ({
+      id,
+      name,
+      slug,
+      isNational: councils.some((c) => c.type === 'NATIONAL')
+    }))
+}
+
 export async function listDocuments(): Promise<DocumentSummary[]> {
   const docs = await prisma.document.findMany({
     orderBy: { createdAt: 'asc' },
     include: {
+      unit: { select: { id: true, name: true, slug: true } },
       versions: {
         where: { status: 'ACTIVE' },
         select: VERSION_META_SELECT,
@@ -41,6 +69,7 @@ export async function listDocuments(): Promise<DocumentSummary[]> {
     title: doc.title,
     type: doc.type as DocumentType,
     slug: doc.slug,
+    unit: doc.unit ?? null,
     createdAt: doc.createdAt,
     activeVersion: doc.versions[0]
       ? {
@@ -55,6 +84,7 @@ export async function getDocumentBySlug(slug: string): Promise<DocumentDetail | 
   const doc = await prisma.document.findUnique({
     where: { slug },
     include: {
+      unit: { select: { id: true, name: true, slug: true } },
       versions: {
         where: { status: 'ACTIVE' },
         select: { ...VERSION_META_SELECT, content: true },
@@ -72,6 +102,7 @@ export async function getDocumentBySlug(slug: string): Promise<DocumentDetail | 
     title: doc.title,
     type: doc.type as DocumentType,
     slug: doc.slug,
+    unit: doc.unit ?? null,
     createdAt: doc.createdAt,
     activeVersion: active
       ? {
@@ -147,18 +178,29 @@ export async function constitutionExists(): Promise<boolean> {
 }
 
 export async function createDocument(
-  data: { title: string; type: DocumentType; slug: string },
+  data: { title: string; type: DocumentType; slug: string; unitId?: string | null },
   _actorId: string
 ): Promise<{ id: string; slug: string }> {
   const doc = await prisma.document.create({
     data: {
       title: data.title,
       type: data.type,
-      slug: data.slug
+      slug: data.slug,
+      unitId: data.unitId ?? null
     }
   })
 
   return { id: doc.id, slug: doc.slug }
+}
+
+export async function assignDocumentUnit(
+  documentId: string,
+  unitId: string | null
+): Promise<void> {
+  await prisma.document.update({
+    where: { id: documentId },
+    data: { unitId }
+  })
 }
 
 export async function createDocumentVersion(
@@ -170,6 +212,11 @@ export async function createDocumentVersion(
     throw new Error(`Invalid version label: "${data.versionLabel}". Use MAJOR.MINOR.PATCH format.`)
   }
 
+  const doc = await prisma.document.findUniqueOrThrow({
+    where: { id: documentId },
+    select: { slug: true, title: true }
+  })
+
   const version = await prisma.documentVersion.create({
     data: {
       documentId,
@@ -178,6 +225,20 @@ export async function createDocumentVersion(
       changelog: data.changelog ?? null,
       status: 'DRAFT',
       createdById: actorId
+    }
+  })
+
+  await logAction({
+    userId: actorId,
+    action: 'DOCUMENT_VERSION_CREATED',
+    entityType: 'DOCUMENT',
+    entityId: documentId,
+    metadata: {
+      documentSlug: doc.slug,
+      documentTitle: doc.title,
+      versionId: version.id,
+      versionLabel: version.versionLabel,
+      status: 'DRAFT'
     }
   })
 

@@ -1,14 +1,29 @@
 <script lang="ts">
+  import { browser } from '$app/environment'
+  import { invalidateAll } from '$app/navigation'
+  import { enhance } from '$app/forms'
   import { page } from '$app/state'
+  import { toast } from 'svelte-sonner'
   import * as Card from '$lib/components/ui/card'
   import * as Table from '$lib/components/ui/table'
+  import * as Tooltip from '$lib/components/ui/tooltip'
   import { Badge } from '$lib/components/ui/badge'
-  import { Button } from '$lib/components/ui/button'
+  import { Button, buttonVariants } from '$lib/components/ui/button'
   import { Separator } from '$lib/components/ui/separator'
+  import { Eye, GitCompare, GitCompareArrows, BookCheck } from '@lucide/svelte'
   import { DOCUMENT_TYPE_LABELS } from '$lib/domain/documents'
-  import type { PageData } from './$types'
+  import type { PageData, ActionData } from './$types'
 
-  let { data }: { data: PageData } = $props()
+  let { data, form }: { data: PageData; form: ActionData } = $props()
+
+  $effect(() => {
+    if (!browser) return
+    if (form?.error) toast.error(form.error)
+    if (form?.success) {
+      toast.success(form.success)
+      invalidateAll()
+    }
+  })
 
   function formatDate(d: Date | string): string {
     return new Date(d).toLocaleDateString('en-GB', {
@@ -39,7 +54,9 @@
 <div class="mb-6">
   <div class="flex flex-wrap items-start justify-between gap-3">
     <h1 class="text-3xl font-bold tracking-tight">{data.document.title}</h1>
-    <Badge variant="secondary">{DOCUMENT_TYPE_LABELS[data.document.type]}</Badge>
+    <div class="flex items-center gap-2">
+      <Badge variant="secondary">{DOCUMENT_TYPE_LABELS[data.document.type]}</Badge>
+    </div>
   </div>
 </div>
 
@@ -67,7 +84,7 @@
           <Table.Head class="w-32">Date</Table.Head>
           <Table.Head class="w-32">Author</Table.Head>
           <Table.Head>Changelog</Table.Head>
-          <Table.Head class="w-44"></Table.Head>
+          <Table.Head class="w-28"></Table.Head>
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -84,26 +101,66 @@
               {#if v.createdBy}
                 {v.createdBy.username ? `@${v.createdBy.username}` : v.createdBy.name}
               {:else}
-                <span class="text-muted-foreground">—</span>
+                <span class="text-muted-foreground">-</span>
               {/if}
             </Table.Cell>
-            <Table.Cell class="text-sm text-muted-foreground">{v.changelog ?? '—'}</Table.Cell>
+            <Table.Cell class="text-sm text-muted-foreground">{v.changelog ?? '-'}</Table.Cell>
             <Table.Cell>
-              <div class="flex items-center gap-2">
-                <a href="{base}/versions/{v.versionLabel}" class="text-primary text-sm hover:underline underline-offset-4">View</a>
-                {#if v.prevVersionLabel}
-                  <a
-                    href="{base}/diff?from={v.prevVersionLabel}&to={v.versionLabel}"
-                    class="text-primary text-sm hover:underline underline-offset-4"
-                  >Diff ↑</a>
-                {/if}
-                {#if activeVersion && v.status !== 'ACTIVE'}
-                  <a
-                    href="{base}/diff?from={v.versionLabel}&to={activeVersion.versionLabel}"
-                    class="text-primary text-sm hover:underline underline-offset-4"
-                  >vs. active</a>
-                {/if}
-              </div>
+              <Tooltip.Provider>
+                <div class="flex items-center gap-1">
+                  <Tooltip.Root>
+                    <Tooltip.Trigger>
+                      {#snippet child({ props })}
+                        <Button variant="ghost" size="icon" class="size-7" href="{base}/versions/{v.versionLabel}" {...props}>
+                          <Eye class="size-3.5" />
+                        </Button>
+                      {/snippet}
+                    </Tooltip.Trigger>
+                    <Tooltip.Content>View version</Tooltip.Content>
+                  </Tooltip.Root>
+
+                  {#if v.prevVersionLabel}
+                    <Tooltip.Root>
+                      <Tooltip.Trigger>
+                        {#snippet child({ props })}
+                          <Button variant="ghost" size="icon" class="size-7" href="{base}/diff?from={v.prevVersionLabel}&to={v.versionLabel}" {...props}>
+                            <GitCompare class="size-3.5" />
+                          </Button>
+                        {/snippet}
+                      </Tooltip.Trigger>
+                      <Tooltip.Content>Diff vs. previous</Tooltip.Content>
+                    </Tooltip.Root>
+                  {/if}
+
+                  {#if activeVersion && v.status !== 'ACTIVE'}
+                    <Tooltip.Root>
+                      <Tooltip.Trigger>
+                        {#snippet child({ props })}
+                          <Button variant="ghost" size="icon" class="size-7" href="{base}/diff?from={v.versionLabel}&to={activeVersion.versionLabel}" {...props}>
+                            <GitCompareArrows class="size-3.5" />
+                          </Button>
+                        {/snippet}
+                      </Tooltip.Trigger>
+                      <Tooltip.Content>Diff vs. active</Tooltip.Content>
+                    </Tooltip.Root>
+                  {/if}
+
+                  {#if data.isAdmin && v.status === 'DRAFT'}
+                    <form id="publish-{v.id}" method="POST" action="?/publishVersion" use:enhance class="hidden">
+                      <input type="hidden" name="versionId" value={v.id} />
+                    </form>
+                    <Tooltip.Root>
+                      <Tooltip.Trigger
+                        class={buttonVariants({ variant: 'ghost', size: 'icon' }) + ' size-7 text-primary'}
+                        onclick={() => (document.getElementById(`publish-${v.id}`) as HTMLFormElement)?.requestSubmit()}
+                      >
+                        <BookCheck class="size-3.5" />
+                      </Tooltip.Trigger>
+                      <Tooltip.Content>Publish version</Tooltip.Content>
+                    </Tooltip.Root>
+                  {/if}
+                </div>
+              </Tooltip.Provider>
             </Table.Cell>
           </Table.Row>
         {/each}

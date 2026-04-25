@@ -2,7 +2,7 @@
   import { page } from '$app/state'
   import * as Sidebar from '$lib/components/ui/sidebar'
   import { useSidebar } from '$lib/components/ui/sidebar'
-  import { Settings2, Users, ShieldCheck, SlidersHorizontal, BookOpen, MapPin } from '@lucide/svelte'
+  import { Settings2, Users, ShieldCheck, SlidersHorizontal, MapPin } from '@lucide/svelte'
 
   const sidebar = useSidebar()
 
@@ -62,19 +62,6 @@
         <a href="/admin/governance" {...props} onclick={closeMobile}>
           <SlidersHorizontal />
           <span>Governance</span>
-        </a>
-      {/snippet}
-    </Sidebar.MenuButton>
-  </Sidebar.MenuItem>
-  <Sidebar.MenuItem>
-    <Sidebar.MenuButton
-      isActive={page.url.pathname.startsWith('/admin/documents')}
-      tooltipContent="Documents"
-    >
-      {#snippet child({ props })}
-        <a href="/admin/documents" {...props} onclick={closeMobile}>
-          <BookOpen />
-          <span>Documents</span>
         </a>
       {/snippet}
     </Sidebar.MenuButton>
