@@ -63,7 +63,7 @@ export const ACTION_OPTIONS: { value: AuditAction | ''; label: string }[] = [
   { value: 'PROPOSAL_CREATED', label: 'Proposal created' },
   { value: 'COMMENT_CREATED', label: 'Comment created' },
   { value: 'VOTE_CAST', label: 'Vote cast' },
-  { value: 'DOCUMENT_VERSION_CREATED', label: 'Document version published' },
+  { value: 'DOCUMENT_VERSION_CREATED', label: 'Document version saved/published' },
   { value: 'ROLE_CHANGED', label: 'Role changed' },
   { value: 'COUNCIL_MEMBER_ADDED', label: 'Council member added' },
   { value: 'COUNCIL_MEMBER_REMOVED', label: 'Council member removed' },
@@ -242,11 +242,13 @@ export function buildLogSentence(entry: ActivityEntry): LogSegment[] {
       const docTitle = m?.documentTitle ?? m?.documentSlug ?? 'a document'
       const versionLabel = m?.versionLabel ?? null
       const docSlug = m?.documentSlug
+      const isDraft = m?.status === 'DRAFT'
       const docHref = docSlug ? `/documents/${docSlug}` : null
-      const diffHref = docSlug && versionLabel ? `/documents/${docSlug}/history` : null
-      const segments: LogSegment[] = [{ type: 'text', value: 'published ' }]
-      if (versionLabel && diffHref) {
-        segments.push({ type: 'code-link', value: versionLabel, href: diffHref })
+      const historyHref = docSlug && versionLabel ? `/documents/${docSlug}/history` : null
+      const verb = isDraft ? 'saved draft ' : 'published '
+      const segments: LogSegment[] = [{ type: 'text', value: verb }]
+      if (versionLabel && historyHref) {
+        segments.push({ type: 'code-link', value: versionLabel, href: historyHref })
       } else if (versionLabel) {
         segments.push({ type: 'code', value: versionLabel })
       } else {

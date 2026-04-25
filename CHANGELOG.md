@@ -5,6 +5,29 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.9.0] - 2026-04-25
+
+### Added
+- Documents: unit/scope assignment per document (national unit as default, unpublished cities excluded)
+- Documents: version editor at `/documents/[slug]/new` with CodeMirror (Tokyo Night theme, Markdown, line wrapping)
+- Documents: draft versions visible in History tab; publish action promotes draft to active
+- Documents: draft creation and publish logged to Activity Log with correct status labels
+- Global Sonner toaster (top-center) with success/error toasts for all document actions (save, publish, delete)
+- `ModeWatcher` added to root layout for consistent dark/light mode across the app
+
+### Changed
+- Documents admin routes (`/admin/documents`) consolidated into `/documents` with ADMIN guards
+- Document overview cards redesigned: type-colored top stripe, title, version/date, badges
+- Document detail page: New Version and Delete buttons as icon buttons next to tab bar
+- History page: action buttons (view, diff, publish) as icon buttons with tooltips; delete button removed from history
+- Diff page: long lines now wrap correctly instead of overflowing horizontally
+
+### Removed
+- `/admin/documents` and `/admin/documents/[slug]/versions/new` routes deleted
+- Documents entry removed from admin sidebar (accessible via main navigation)
+
+---
+
 ## [0.8.1] - 2026-03-27
 
 ### Added

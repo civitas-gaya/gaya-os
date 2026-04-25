@@ -46,11 +46,19 @@ export interface DocumentVersionMeta {
   createdBy: DocumentVersionAuthor | null
 }
 
+export interface DocumentUnit {
+  id: string
+  name: string
+  slug: string
+  isNational?: boolean
+}
+
 export interface DocumentSummary {
   id: string
   title: string
   type: DocumentType
   slug: string
+  unit: DocumentUnit | null
   activeVersion: DocumentVersionMeta | null
   createdAt: Date
 }

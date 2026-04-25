@@ -13,8 +13,9 @@
   import CommunityNavMenu from '$lib/components/app/community-nav-menu.svelte'
   import CouncilNavMenu from '$lib/components/app/council-nav-menu.svelte'
   import MessagesWidget from '$lib/components/app/messages-widget.svelte'
-  import { LogOut, Earth } from '@lucide/svelte'
+  import { LogOut } from '@lucide/svelte'
   import AppBreadcrumb from '$lib/components/app/breadcrumb.svelte'
+  import { Toaster } from '$lib/components/ui/sonner'
 
   let { data, children } = $props()
 
@@ -44,9 +45,7 @@
     '/admin/users': [{ label: 'Admin', href: '/admin' }, { label: 'User Management' }],
     '/admin/roles': [{ label: 'Admin', href: '/admin' }, { label: 'Roles & Permissions' }],
     '/admin/governance': [{ label: 'Admin', href: '/admin' }, { label: 'Governance Settings' }],
-    '/admin/documents': [{ label: 'Admin', href: '/admin' }, { label: 'Documents' }],
     '/admin/cities': [{ label: 'Admin', href: '/admin' }, { label: 'Cities' }],
-    '/admin/documents/new': [{ label: 'Admin', href: '/admin' }, { label: 'Documents', href: '/admin/documents' }, { label: 'New' }],
     '/settings/profile': [{ label: 'Settings' }, { label: 'Profile' }],
     '/settings/security': [{ label: 'Settings' }, { label: 'Security & Privacy' }]
   }
@@ -202,4 +201,5 @@
       {@render children()}
     </main>
   </Sidebar.Inset>
+<Toaster position="top-center" />
 </Sidebar.Provider>
